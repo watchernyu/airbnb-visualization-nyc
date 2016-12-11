@@ -7,11 +7,28 @@
 function floatingTooltip(tooltipId, width) {
   // Local variable to hold tooltip div for
   // manipulation in other functions.
+    
+
   var tt = d3.select('body')
     .append('div')
     .attr('class', 'tooltip')
     .attr('id', tooltipId)
-    .style('pointer-events', 'none');
+    .style('pointer-events', 'none')
+    .style(
+        {
+    position: "absolute",
+	top: "100px",
+	left: "100px",
+    "border-radius": "5px",
+    border: "#000",
+    background: "#fff",
+    color: "black",
+	padding: "10px",
+	width: "200px",
+	"font-size": "12px",
+    opacity: "0.7"
+        }
+    );
 
   // Set a width if it is provided.
   if (width) {

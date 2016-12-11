@@ -1320,6 +1320,7 @@ function updateStatsAndMap(){
     .classed("bubble", true)
     .attr("r", 0)
     .attr("fill", function(d){return fillColor(d.room_type);})
+    .on("click", bubbleClickHost)
     .on("mouseover", showDetail)
     .on("mouseout", hideDetail)
     .attr('stroke', function (d) 
@@ -1476,15 +1477,20 @@ function addCommas(nStr) {
   return x1 + x2;
 }
 
+function bubbleClickHost(d,i){
+    d_trans = {key:d.host_id + "|" + d.host_name };
+    console.log(d);
+    clickHost(d_trans,i);
+}
 function clickHost(d,i){
+    
+//    console.log(d);
 
     ga('send', 'event', 'click', 'host', d.key);
     
-//    console.log(d.key);
-
     if (FUNCTIONALITY_MAP){
         var hostListings = hostDimension.filterExact(d.key);
-        var currentHostName = d.key.split("|")[1];
+//        var currentHostName = d.key.split("|")[1];
 //        console.log(currentHostName);
         var bounds = [];
         hostListings.top(Infinity).forEach(function (d) {
@@ -1496,20 +1502,6 @@ function clickHost(d,i){
             .data(hostListings.top(Infinity), function(d){ return d.id; })
             .transition().duration(1000).style("stroke", "black").style("stroke-width", 0.25).attr("r", 20).style("z-index", 99).transition().delay(2000).duration(1000).attr("r", originalCircleRadius).style("stroke-width", 0);
         
-        
-        var hostBubbleCircle = d3.transition().duration(1000).style("stoke","black").style("stroke-width",4).attr("r",1.5*radiusScale(d.calculated_host_listings_count)).style("z-index", 99).transition().delay(2000).duration(1000).attr("r", radiusScale(d.calculated_host_listings_count))
-//        .style("stroke-width", function(d){if (d.idVerified == 't')
-//        {return 3};})
-              ;
-        
-        var selectedBubble = d3.selectAll(".bubble").filter(function(d){return d.host_name == currentHostName; })
-        
-        selectedBubble.transition().duration(1000).style("stoke","black").style("stroke-width",4).attr("r",1.5*radiusScale(d.calculated_host_listings_count)).style("z-index", 99).transition().delay(2000).duration(1000).attr("r", radiusScale(d.calculated_host_listings_count));
-        
-//            .transition(hostBubbleCircle)
-        ;
-//        console.log(selectedBubble);
-          
         hostDimension.filterAll();
     }
 };
